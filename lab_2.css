@@ -1,6 +1,26 @@
 ﻿.bar {
-    display:inline-block;
-    width: 20px;
-    height: 75px;
-    background-color: teal;
+    fill: salmon;
+}
+
+.circle {
+    stroke: salmon;
+    fill: salmon;
+    stroke-width: 2px;
+}
+
+.axis {
+    stroke: lightsalmon;
+    stroke-width: 3px;
+}
+
+.label {
+    font-family: sans-serif;
+    font-size: 11px;
+    fill: black;
+    text-anchor: middle
+}
+
+.svg {
+    margin: 15px;
+    display: block;
 }
