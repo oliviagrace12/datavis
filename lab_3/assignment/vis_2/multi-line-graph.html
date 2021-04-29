@@ -17,21 +17,23 @@
 <!--<div id="my_dataviz"></div>-->
 
 <body>
-    <svg id="svg1"></svg>
-    <svg id="svg2"></svg>
+    <!--<svg id="svg1"></svg>-->
+    <!--<svg id="svg2"></svg>-->
 
     <script>var margin = { top: 10, right: 30, bottom: 30, left: 60 },
             width = 460 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
 
-        var svg1 = d3.select("#svg1")
+        var svg1 = d3.select("body")
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
-        var svg2 = d3.select("#svg2")
+        var svg2 = d3.select("body")
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -86,5 +88,7 @@
         };
 
         drawGraph(svg1, ageData);
-        drawGraph(svg2, ageData);</script>
+        drawGraph(svg2, ageData);
+
+        </script>
 </body>
