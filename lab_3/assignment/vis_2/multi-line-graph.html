@@ -22,8 +22,6 @@
 
     <script>
         var margin = { top: 10, right: 30, bottom: 30, left: 60 };
-        var width = 460 - margin.left - margin.right;
-        var height = 400 - margin.top - margin.bottom;
 
         var createSvg = function (width, height) {
             return d3.select("body")
@@ -37,7 +35,10 @@
 
         var ageData = d3.csvParse(ageDataText);
 
-        var drawGraph = function (svg, data) {
+        var drawMultiLineGraph = function (width, height, data) {
+            var svg = createSvg(width, height);
+            var widthMinusMargins = width - margin.left - margin.right;
+            var heightMinusMargins = height - margin.top - margin.bottom;
 
             var sumstat = d3.nest()
                 .key(function (d) { return d.name; })
@@ -46,15 +47,15 @@
             // Add X axis --> it is a date format
             var x = d3.scaleLinear()
                 .domain(d3.extent(data, function (d) { return d.year; }))
-                .range([0, width]);
+                .range([0, widthMinusMargins]);
             svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(0," + heightMinusMargins + ")")
                 .call(d3.axisBottom(x).ticks(5));
 
             // Add Y axis
             var y = d3.scaleLinear()
                 .domain([0, d3.max(data, function (d) { return +d.n; })])
-                .range([height, 0]);
+                .range([heightMinusMargins, 0]);
             svg.append("g")
                 .call(d3.axisLeft(y));
 
@@ -81,8 +82,9 @@
 
         };
 
-        drawGraph(createSvg(460, 400), ageData);
-        drawGraph(createSvg(460, 400), ageData);
+        for (var i = 0; i < 3; i++) {
+            drawMultiLineGraph(460, 400, ageData);
+        }
 
         </script>
 </body>
