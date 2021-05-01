@@ -1,20 +1,19 @@
-﻿var data1 = d3.csvParse(heatmapDataText1);
+﻿var margin = { top: 30, right: 30, bottom: 30, left: 30 };
 
-var drawHeatmap = function (inputData) {
+var data1 = d3.csvParse(heatmapDataText1);
+var data2 = d3.csvParse(heatmapDataText2);
 
-    // set the dimensions and margins of the graph
-    var margin = { top: 30, right: 30, bottom: 30, left: 30 },
-        width = 450 - margin.left - margin.right,
-        height = 450 - margin.top - margin.bottom;
+var drawHeatmap = function (width, height, inputData) {
 
     // append the svg object to the body of the page
     var svg = d3.select("body")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", width)
+        .attr("height", height)
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
+
 
     // Labels of row and columns
     var myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
@@ -22,17 +21,17 @@ var drawHeatmap = function (inputData) {
 
     // Build X scales and axis:
     var x = d3.scaleBand()
-        .range([0, width])
+        .range([0, width - margin.left - margin.right])
         .domain(myGroups)
         .padding(0.01);
 
     svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
         .call(d3.axisBottom(x));
 
     // Build X scales and axis:
     var y = d3.scaleBand()
-        .range([height, 0])
+        .range([height - margin.top - margin.bottom, 0])
         .domain(myVars)
         .padding(0.01);
 
