@@ -11,6 +11,8 @@ var createSvg = function (width, height) {
 };
 
 var ageData = d3.csvParse(ageDataText);
+var newAgeData = d3.csvParse(newAgeDataText);
+
 
 var drawMultiLineGraph = function (width, height, data) {
     var svg = createSvg(width, height);
