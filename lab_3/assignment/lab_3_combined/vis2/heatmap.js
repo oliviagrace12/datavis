@@ -1,4 +1,6 @@
-﻿var drawHeatmap = function () {
+﻿var data1 = d3.csvParse(heatmapDataText1);
+
+var drawHeatmap = function (inputData) {
 
     // set the dimensions and margins of the graph
     var margin = { top: 30, right: 30, bottom: 30, left: 30 },
@@ -43,17 +45,16 @@
         .domain([1, 100]);
 
     //Read the data
-    d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function (data) {
+    
 
-        svg.selectAll()
-            .data(data, function (d) { return d.group + ':' + d.variable; })
-            .enter()
-            .append("rect")
-            .attr("x", function (d) { return x(d.group) })
-            .attr("y", function (d) { return y(d.variable) })
-            .attr("width", x.bandwidth())
-            .attr("height", y.bandwidth())
-            .style("fill", function (d) { return myColor(d.value) })
+    svg.selectAll()
+        .data(inputData, function (d) { return d.group + ':' + d.variable; })
+        .enter()
+        .append("rect")
+        .attr("x", function (d) { return x(d.group) })
+        .attr("y", function (d) { return y(d.variable) })
+        .attr("width", x.bandwidth())
+        .attr("height", y.bandwidth())
+        .style("fill", function (d) { return myColor(d.value) });
 
-    });
 }
