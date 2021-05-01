@@ -1,18 +1,19 @@
-﻿var drawDendogram = function (data) {
+﻿var drawDendogram = function () {
+
     // set the dimensions and margins of the graph
     var width = 460;
     var height = 460;
 
-    //append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
+    // append the svg object to the body of the page
+    var svg = d3.select("body")
         .append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(40,0)");  // bit of margin on the left = 40
 
-    // read json data
-    d3.json(data, function (data) {
+    // read json data     
+    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_dendrogram.json", function (data) {
 
         // Create the cluster layout: 
         var cluster = d3.cluster()
@@ -37,7 +38,7 @@
                     + " " + d.parent.y + "," + d.parent.x;
             })
             .style("fill", 'none')
-            .attr("stroke", '#ccc')
+            .attr("stroke", '#ccc');
 
 
         // Add a circle for each node.
@@ -52,7 +53,7 @@
             .attr("r", 7)
             .style("fill", "#69b3a2")
             .attr("stroke", "black")
-            .style("stroke-width", 2)
+            .style("stroke-width", 2);
 
-    })
+    });
 }
