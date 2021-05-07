@@ -1,4 +1,6 @@
-﻿var drawChloro = function (svg) {
+﻿var processData = function (d) { d3.map().set(d.code, +d.pop) };
+
+var drawChloro = function (svg, populationDataText) {
     var width = +svg.attr("width");
     var height = +svg.attr("height");
 
@@ -15,11 +17,16 @@
         .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
         .range(d3.schemeBlues[7]);
 
+    var populationData = d3.csvParse(populationDataText);
+    
+
     // Load external data and boot
     d3.queue()
         .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
-        .defer(d3.csv, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv", function (d) { data.set(d.code, +d.pop); })
+        .defer(processData, populationData)
         .await(ready);
+
+    //d3.csvParse(populationData, (d) => { data.set(d.code, +d.pop) });
 
     function ready(error, topo) {
 
