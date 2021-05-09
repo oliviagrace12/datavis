@@ -2,25 +2,32 @@
 <meta charset="utf-8">
 <head>
     <title>Lab 3 Map</title>
-
     <meta charset="UTF-8" />
-
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="us-states.json.js"></script>
+    <style type="text/css">
+        .map {
+            fill: green;
+        }
+    </style>
 </head>
 
 <body>
     <script  type="text/javascript">
-        var path = d3.geoPath().projection(d3.geoAlbersUsa());
+        var w = 500;
+        var h = 300;
 
-        var svg = d3.select("body").append("svg").attr("width", 500).attr("height", 300);
+        var projection = d3.geoAlbersUsa().translate([w / 2, h / 2]).scale([500]);
+        var path = d3.geoPath().projection(projection);
 
-        d3.json(usStatesText, function (json) {
+        var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+
+        d3.json("https://raw.githubusercontent.com/oliviagrace12/datavis/main/lab_3/assignment/lab_3_combined/geovis/us-states.json", function (json) {
             svg.selectAll("path")
                 .data(json.features)
                 .enter()
                 .append("path")
-                .attr("d", path);
+                .attr("d", path)
+                .style("fill", "forestgreen");
         });
     </script>
 </body>
