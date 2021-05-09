@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>Lab 3 Map</title>
+
+    <meta charset="UTF-8" />
+
+    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="us-states.json.js"></script>
+</head>
+
+<body>
+    <script  type="text/javascript">
+        var path = d3.geoPath().projection(d3.geoAlbersUsa());
+
+        var svg = d3.select("body").append("svg").attr("width", 500).attr("height", 300);
+
+        d3.json(usStatesText, function (json) {
+            svg.selectAll("path")
+                .data(json.features)
+                .enter()
+                .append("path")
+                .attr("d", path);
+        });
+    </script>
+</body>
