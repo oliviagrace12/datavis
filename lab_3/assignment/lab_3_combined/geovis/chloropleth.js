@@ -16,6 +16,23 @@ var svg = d3.select("body")
     .attr("width", w).
     attr("height", h);
 
+var dragging = function (d) {
+    var offset = projection.translate();
+    offset[0] += d3.event.dx;
+    offset[1] += d3.event.dy;
+
+    projection.translate(offset);
+
+    svg.selectAll("path").attr("d", path);
+
+    svg.selectAll("circle")
+        .attr("cx", (d) => { return projection([d.lon, d.lat])[0] })
+        .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
+}
+
+var drag = d3.drag().on("drag", dragging);
+var map = svg.append("g").attr("id", "map").call(drag);
+
 var drawCloropleth = function () {
     d3.csv(agDataLink, (data) => {
         createColorDomain(data);
@@ -57,7 +74,7 @@ var findJsonState = function (dataState, json) {
 }
 
 var addMapAndDataToSvg = function (json) {
-    svg.selectAll("path")
+    map.selectAll("path")
         .data(json.features)
         .enter()
         .append("path")
@@ -73,7 +90,7 @@ var addMapAndDataToSvg = function (json) {
 }
 
 var addCitiesToSvg = function (data) {
-    svg.selectAll("circle")
+    map.selectAll("circle")
         .data(data)
         .enter()
         .append("circle")
@@ -117,11 +134,11 @@ var createPanButtons = function () {
 
             projection.translate(offset);
 
-            svg.selectAll("path")
+            map.selectAll("path")
                 .transition()
                 .attr("d", path);
 
-            svg.selectAll("circle")
+            map.selectAll("circle")
                 .transition()
                 .attr("cx", (d) => { return projection([d.lon, d.lat])[0] })
                 .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
