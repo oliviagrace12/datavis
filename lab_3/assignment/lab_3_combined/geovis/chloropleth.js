@@ -95,7 +95,7 @@ var createPanButtons = function () {
     d3.selectAll(".pan")
         .on("click", function () {
             var offset = projection.translate();
-            var moveAmountPerClick = 50;
+            var moveAmountPerClick = 100;
             var direction = d3.select(this).attr("id");
 
             switch (direction) {
@@ -117,9 +117,12 @@ var createPanButtons = function () {
 
             projection.translate(offset);
 
-            svg.selectAll("path").attr("d", path);
+            svg.selectAll("path")
+                .transition()
+                .attr("d", path);
 
             svg.selectAll("circle")
+                .transition()
                 .attr("cx", (d) => { return projection([d.lon, d.lat])[0] })
                 .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
         });
