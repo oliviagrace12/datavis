@@ -34,6 +34,8 @@ var drag = d3.drag().on("drag", dragging);
 var map = svg.append("g").attr("id", "map").call(drag);
 
 var drawCloropleth = function () {
+    drawBackgroundForDragging();
+
     d3.csv(agDataLink, (data) => {
         createColorDomain(data);
         d3.json(usStatesDataLink, (json) => {
@@ -45,6 +47,15 @@ var drawCloropleth = function () {
             });
         });
     });
+}
+
+var drawBackgroundForDragging = function () {
+    map.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", w)
+        .attr("height", h)
+        .attr("opacity", 0);
 }
 
 var createColorDomain = function (data) {
