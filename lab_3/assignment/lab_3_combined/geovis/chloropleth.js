@@ -5,10 +5,10 @@ var usCitiesDataLink = "https://raw.githubusercontent.com/oliviagrace12/datavis/
 var w = 500;
 var h = 300;
 
-var projection = d3.geoAlbersUsa().translate([w / 2, h / 2]).scale([500]);
+var projection = d3.geoAlbersUsa().translate([w / 2, h / 2]).scale([2000]);
 var path = d3.geoPath().projection(projection);
 
-var colorRange = ['rgb(242,240,247)', 'rgb(203,201,226)', 'rgb(158,154,200)', 'rgb(117,107,177)', 'rgb(84,39,143)'];
+var colorRange = ['rgb(237,248,251)', 'rgb(178,226,226)', 'rgb(102,194,164)', 'rgb(44,162,95)', 'rgb(0,109,44)'];
 var color = d3.scaleQuantize().range(colorRange);
 
 var svg = d3.select("body")
@@ -24,6 +24,7 @@ var drawCloropleth = function () {
             addMapAndDataToSvg(json);
             d3.csv(usCitiesDataLink, (data) => {
                 addCitiesToSvg(data);
+                createPanButtons();
             });
         });
     });
@@ -83,4 +84,119 @@ var addCitiesToSvg = function (data) {
         .style("stroke", "grey")
         .style("stroke-width", 0.25)
         .style("opacity", 0.75);
+}
+
+var createPanButtons = function () {
+    var north = createNorthPanButton();
+    var south = createSouthPanButton();
+    var west = createWestPanButton();
+    var east = createEastPanButton();
+
+    d3.selectAll(".pan")
+        .on("click", function () {
+            var offset = projection.translate();
+            var moveAmountPerClick = 50;
+            var direction = d3.select(this).attr("id");
+
+            switch (direction) {
+                case "north":
+                    offset[1] += moveAmountPerClick;
+                    break;
+                case "south":
+                    offset[1] -= moveAmountPerClick;
+                    break;
+                case "west":
+                    offset[0] += moveAmountPerClick;
+                    break;
+                case "east":
+                    offset[0] -= moveAmountPerClick;
+                    break;
+                default:
+                    break;
+            }
+
+            projection.translate(offset);
+
+            svg.selectAll("path").attr("d", path);
+
+            svg.selectAll("circle")
+                .attr("cx", (d) => { return projection([d.lon, d.lat])[0] })
+                .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
+        });
+};
+
+var createNorthPanButton = function () {
+    var north = svg.append("g")
+        .attr("class", "pan")
+        .attr("id", "north");
+
+    north.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", w)
+        .attr("height", 30);
+
+    north.append("text")
+        .attr("x", w / 2)
+        .attr("y", 20)
+        .html("&uarr;");
+
+    return north;
+}
+
+var createSouthPanButton = function () {
+    var south = svg.append("g")
+        .attr("class", "pan")
+        .attr("id", "south");
+
+    south.append("rect")
+        .attr("x", 0)
+        .attr("y", h - 30)
+        .attr("width", w)
+        .attr("height", 30);
+
+    south.append("text")
+        .attr("x", w / 2)
+        .attr("y", h - 10)
+        .html("&darr;");
+
+    return south;
+}
+
+var createWestPanButton = function () {
+    var west = svg.append("g")
+        .attr("class", "pan")
+        .attr("id", "west");
+
+    west.append("rect")
+        .attr("x", 0)
+        .attr("y", 30)
+        .attr("width", 30)
+        .attr("height", h - 60);
+
+    west.append("text")
+        .attr("x", 15)
+        .attr("y", h / 2)
+        .html("&larr;");
+
+    return west;
+}
+
+var createEastPanButton = function () {
+    var east = svg.append("g")
+        .attr("class", "pan")
+        .attr("id", "east");
+
+    east.append("rect")
+        .attr("x", w - 30)
+        .attr("y", 30)
+        .attr("width", 30)
+        .attr("height", h - 60);
+
+    east.append("text")
+        .attr("x", w - 15)
+        .attr("y", h / 2)
+        .html("&rarr;");
+
+    return east;
 }

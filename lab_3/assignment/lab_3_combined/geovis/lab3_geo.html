@@ -5,11 +5,28 @@
 
     <meta charset="UTF-8" />
     <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+
+    <style type="text/css">
+        .pan rect {
+            fill: black;
+            opacity: 0.3;
+        }
+        .pan text {
+            fill: black;
+            font-size: 18px;
+            text-anchor: middle;
+        }
+        .pan:hover rect {
+            fill: seagreen;
+        }
+        .pan:hover text {
+            fill: yellow;
+        }
+    </style>
+
 </head>
 
 <body>
     <script type="text/javascript" src="chloropleth.js"></script>
-    <script type="text/javascript">
-        drawCloropleth();
-    </script>
+    <script type="text/javascript">drawCloropleth();</script>
 </body>
