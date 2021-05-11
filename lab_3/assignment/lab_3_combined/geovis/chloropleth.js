@@ -31,8 +31,13 @@ var zooming = function (d) {
         .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
 }
 
-var zoom = d3.zoom().on("zoom", zooming);
+var zoom = d3.zoom()
+    .scaleExtent([0.2, 2.0])
+    .translateExtent([[-1200, -700], [1200, 700]])
+    .on("zoom", zooming);
+
 var center = projection([-107.0, 42.]);
+
 var map = svg.append("g")
     .attr("id", "map")
     .call(zoom)
