@@ -12,17 +12,21 @@
             fill: black;
             opacity: 0.3;
         }
-        .pan text
+        .zoom rect {
+            rx = 5;
+            ry = 5;
+        }
+        .pan text,
         .zoom text {
             fill: black;
             font-size: 18px;
             text-anchor: middle;
         }
-        .pan:hover rect
+        .pan:hover rect,
         .zoom:hover rect {
             fill: seagreen;
         }
-        .pan:hover text
+        .pan:hover text,
         .zoom:hover text {
             fill: forestgreen;
         }

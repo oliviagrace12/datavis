@@ -246,10 +246,12 @@ var createZoomButtons = function () {
         .attr("x", w - 65)
         .attr("y", h - 65)
         .attr("width", 30)
-        .attr("height", 30);
+        .attr("height", 30)
+        .attr("rx", 5)
+        .attr("ry", 5);
 
     zoomIn.append("text")
-        .attr("x", w - 54)
+        .attr("x", w - 51)
         .attr("y", h - 46)
         .html("+");
 
@@ -261,10 +263,12 @@ var createZoomButtons = function () {
         .attr("x", w - 97)
         .attr("y", h - 65)
         .attr("width", 30)
-        .attr("height", 30);
+        .attr("height", 30)
+        .attr("rx", 5)
+        .attr("ry", 5);
 
     zoomOut.append("text")
-        .attr("x", w - 84)
+        .attr("x", w - 82)
         .attr("y", h - 46)
         .html("-");
 
