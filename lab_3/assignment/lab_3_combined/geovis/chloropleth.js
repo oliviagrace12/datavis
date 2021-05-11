@@ -16,12 +16,13 @@ var svg = d3.select("body")
     .attr("width", w).
     attr("height", h);
 
-var dragging = function (d) {
-    var offset = projection.translate();
-    offset[0] += d3.event.dx;
-    offset[1] += d3.event.dy;
+var zooming = function (d) {
+    var offset = [d3.event.transform.x, d3.event.transform.y];
+    var newScale = d3.event.transform.k * 2000;
 
-    projection.translate(offset);
+    projection
+        .translate(offset)
+        .scale(newScale);
 
     svg.selectAll("path").attr("d", path);
 
@@ -30,11 +31,21 @@ var dragging = function (d) {
         .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
 }
 
-var drag = d3.drag().on("drag", dragging);
-var map = svg.append("g").attr("id", "map").call(drag);
+var zoom = d3.zoom().on("zoom", zooming);
+var center = projection([-107.0, 42.]);
+var map = svg.append("g")
+    .attr("id", "map")
+    .call(zoom)
+    .call(
+        zoom.transform,
+        d3.zoomIdentity
+            .translate(w / 2, h / 2)
+            .scale(0.25)
+            .translate(-center[0], -center[1])
+    );
 
 var drawCloropleth = function () {
-    drawBackgroundForDragging();
+    drawBackgroundForZooming();
 
     d3.csv(agDataLink, (data) => {
         createColorDomain(data);
@@ -49,7 +60,7 @@ var drawCloropleth = function () {
     });
 }
 
-var drawBackgroundForDragging = function () {
+var drawBackgroundForZooming = function () {
     map.append("rect")
         .attr("x", 0)
         .attr("y", 0)
@@ -122,37 +133,30 @@ var createPanButtons = function () {
 
     d3.selectAll(".pan")
         .on("click", function () {
-            var offset = projection.translate();
             var moveAmountPerClick = 100;
             var direction = d3.select(this).attr("id");
 
+            var x = 0;
+            var y = 0;
+
             switch (direction) {
                 case "north":
-                    offset[1] += moveAmountPerClick;
+                    y += moveAmountPerClick;
                     break;
                 case "south":
-                    offset[1] -= moveAmountPerClick;
+                    y -= moveAmountPerClick;
                     break;
                 case "west":
-                    offset[0] += moveAmountPerClick;
+                    x += moveAmountPerClick;
                     break;
                 case "east":
-                    offset[0] -= moveAmountPerClick;
+                    x -= moveAmountPerClick;
                     break;
                 default:
                     break;
             }
 
-            projection.translate(offset);
-
-            map.selectAll("path")
-                .transition()
-                .attr("d", path);
-
-            map.selectAll("circle")
-                .transition()
-                .attr("cx", (d) => { return projection([d.lon, d.lat])[0] })
-                .attr("cy", (d) => { return projection([d.lon, d.lat])[1] });
+            map.transition().call(zoom.translateBy, x, y);
         });
 };
 
