@@ -55,6 +55,7 @@ var drawCloropleth = function () {
             d3.csv(usCitiesDataLink, (data) => {
                 addCitiesToSvg(data);
                 createPanButtons();
+                createZoomButtons();
             });
         });
     });
@@ -234,4 +235,57 @@ var createEastPanButton = function () {
         .html("&rarr;");
 
     return east;
+}
+
+var createZoomButtons = function () {
+    var zoomIn = svg.append("g")
+        .attr("class", "zoom")
+        .attr("id", "zoomIn");
+
+    zoomIn.append("rect")
+        .attr("x", w - 65)
+        .attr("y", h - 65)
+        .attr("width", 30)
+        .attr("height", 30);
+
+    zoomIn.append("text")
+        .attr("x", w - 54)
+        .attr("y", h - 46)
+        .html("+");
+
+    var zoomOut = svg.append("g")
+        .attr("class", "zoom")
+        .attr("id", "zoomOut");
+
+    zoomOut.append("rect")
+        .attr("x", w - 97)
+        .attr("y", h - 65)
+        .attr("width", 30)
+        .attr("height", 30);
+
+    zoomOut.append("text")
+        .attr("x", w - 84)
+        .attr("y", h - 46)
+        .html("-");
+
+    d3.selectAll(".zoom")
+        .on("click", function () {
+            var moveAmountPerClick = 100;
+            var zoomDirection = d3.select(this).attr("id");
+
+            var scaleFactor = 0;
+
+            switch (zoomDirection) {
+                case "zoomIn":
+                    scaleFactor = 1.5;
+                    break;
+                case "zoomOut":
+                    scaleFactor = 0.75;
+                    break;
+                default:
+                    break;
+            }
+
+            map.transition().call(zoom.scaleBy, scaleFactor);
+        });
 }
