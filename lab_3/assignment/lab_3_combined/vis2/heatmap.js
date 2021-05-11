@@ -40,7 +40,7 @@ var drawHeatmap = function (width, height, inputData) {
 
     // Build color scale 
     var myColor = d3.scaleLinear()
-        .range(["white", "#69b3a2"])
+        .range(["white", "#fc4e2a"])
         .domain([1, 100]);
 
     //Read the data
