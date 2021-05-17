@@ -1,7 +1,7 @@
 ﻿class StackedBarGraphVis {
 
     constructor() {
-        //this.SbDispatch = d3.dispatch("clicked");
+        this.SbDispatch = d3.dispatch("clicked");
     }
 
     drawLineGraph() {
@@ -18,8 +18,9 @@
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
+        var dispatch = this.SbDispatch;
 
-        d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_stacked.csv", function (data) {
+        d3.csv("https://raw.githubusercontent.com/oliviagrace12/datavis/main/lab_4/assignment/fruit_data.csv", function (data) {
 
             // List of subgroups = header of the csv files = soil condition here (Nitrogen, normal, stress)
             var subgroups = data.columns.slice(1)
@@ -57,18 +58,20 @@
             // Show the bars
             svg.append("g")
                 .selectAll("g")
-                // Enter in the stack data = loop key per key = group per group
                 .data(stackedData)
                 .enter().append("g")
                 .attr("fill", function (d) { return color(d.key); })
+                .on("click", function (d) {
+                    dispatch.call("clicked", {}, d.key);
+                })
                 .selectAll("rect")
-                // enter a second time = loop subgroup per subgroup to add all rectangles
                 .data(function (d) { return d; })
                 .enter().append("rect")
                 .attr("x", function (d) { return x(d.data.group); })
                 .attr("y", function (d) { return y(d[1]); })
                 .attr("height", function (d) { return y(d[0]) - y(d[1]); })
-                .attr("width", x.bandwidth())
+                .attr("width", x.bandwidth());
+
         })
     }
 }

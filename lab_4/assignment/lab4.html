@@ -5,7 +5,36 @@
     <script src="stackedbar.js"></script>
 </head>
 <body>
-    <script>new StackedBarGraphVis().drawLineGraph()</script>
+    <script>
+        var subgroups;
+        var groups;
+        var color;
+        var stackedData;
+
+        d3.csv("https://raw.githubusercontent.com/oliviagrace12/datavis/main/lab_4/assignment/fruit_data.csv", function (data) {
+
+            // List of subgroups = header of the csv files = soil condition here (Nitrogen, normal, stress)
+            subgroups = data.columns.slice(1)
+
+            // List of groups = species here = value of the first column called group -> I show them on the X axis
+            groups = d3.map(data, function (d) { return (d.group) }).keys()
+
+            color = d3.scaleOrdinal()
+                .domain(subgroups)
+                .range(['#e41a1c', '#377eb8', '#4daf4a'])
+
+            //stack the data? --> stack per subgroup
+            stackedData = d3.stack()
+                .keys(subgroups)
+                (data)
+        });
+
+        var SBGraph = new StackedBarGraphVis();
+
+        SBGraph.drawLineGraph();
+        SBGraph.SbDispatch.on("clicked", (key) => {
+            console.log("Clicked!: " + key);
+        })</script>
 </body>
 
 
