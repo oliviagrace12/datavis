@@ -6,12 +6,12 @@
 </head>
 <body>
     <script>
-        var subgroups;
-        var groups;
-        var color;
-        var stackedData;
 
         d3.csv("https://raw.githubusercontent.com/oliviagrace12/datavis/main/lab_4/assignment/fruit_data.csv", function (data) {
+            var subgroups;
+            var groups;
+            var color;
+            var stackedData;
 
             // List of subgroups = header of the csv files = soil condition here (Nitrogen, normal, stress)
             subgroups = data.columns.slice(1)
@@ -27,14 +27,16 @@
             stackedData = d3.stack()
                 .keys(subgroups)
                 (data)
+
+            var SBGraph = new StackedBarGraphVis();
+
+            SBGraph.drawLineGraph(subgroups, groups, stackedData);
+            SBGraph.SbDispatch.on("clicked", (key) => {
+                console.log("Clicked!: " + key);
+            })
         });
 
-        var SBGraph = new StackedBarGraphVis();
-
-        SBGraph.drawLineGraph();
-        SBGraph.SbDispatch.on("clicked", (key) => {
-            console.log("Clicked!: " + key);
-        })</script>
+        </script>
 </body>
 
 
