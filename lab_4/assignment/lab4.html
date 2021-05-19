@@ -3,8 +3,11 @@
     <title>Lab 4: Coorindated Views</title>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="stackedbar.js"></script>
+    <script src="singlebar.js"></script>
+
 </head>
 <body>
+    <svg id="single" width="450" height="450"></svg>
     <script>
 
         d3.csv("https://raw.githubusercontent.com/oliviagrace12/datavis/main/lab_4/assignment/fruit_data.csv", function (data) {
@@ -19,6 +22,8 @@
             // List of groups = species here = value of the first column called group -> I show them on the X axis
             groups = d3.map(data, function (d) { return (d.group) }).keys()
 
+            subgroupData = data.columns;
+
             color = d3.scaleOrdinal()
                 .domain(subgroups)
                 .range(['#e41a1c', '#377eb8', '#4daf4a'])
@@ -28,11 +33,13 @@
                 .keys(subgroups)
                 (data)
 
-            var SBGraph = new StackedBarGraphVis();
+            var stacked = new StackedBarGraphVis();
+            var single = new SingleBarGraphVis();
 
-            SBGraph.drawLineGraph(subgroups, groups, stackedData);
-            SBGraph.SbDispatch.on("clicked", (key) => {
+            stacked.drawStackedBarGraph(subgroups, groups, stackedData);
+            stacked.SbDispatch.on("clicked", (key) => {
                 console.log("Clicked!: " + key);
+                single.drawSingleBarGraph(d3.select("#single"), key, groups, subgroups)
             })
         });
 

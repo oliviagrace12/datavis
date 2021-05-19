@@ -4,7 +4,7 @@
         this.SbDispatch = d3.dispatch("clicked");
     }
 
-    drawLineGraph(subgroups, groups, stackedData) {
+    drawStackedBarGraph(subgroups, groups, stackedData) {
         var margin = { top: 10, right: 30, bottom: 20, left: 50 },
             width = 460 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
