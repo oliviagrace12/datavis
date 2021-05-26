@@ -1,30 +1,44 @@
 class SingleBarGraphVis {
     drawSingleBarGraph(svg, key, groups, subgroups) {
         svg.selectAll("rect").remove();
+        svg.selectAll("text").remove();
+
         var dataUrl = "https://raw.githubusercontent.com/oliviagrace12/datavis/main/lab_4/assignment/fruit_data.csv";
         d3.csv(dataUrl, function (data) {
             var width = +svg.attr("width");
             var height = +svg.attr("height");
-
-            var valueMap = d3.map(data, function (d) { return (d.group) })
-
             
-
             var x = d3.scaleBand()
             .domain(groups)
-            .range([0, width])
+            .range([40, width-20])
             .padding([0.2])
 
             var y = d3.scaleLinear()
             .domain([0, 60])
-            .range([+svg.attr("height"), 0]);
+            .range([height, 0]);
             
-            svg.append("g")
-            .call(d3.axisLeft(y));
-
             var color = d3.scaleOrdinal()
             .domain(subgroups)
             .range(['#e41a1c', '#377eb8', '#4daf4a'])
+
+            svg.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .text(function (d) { 
+                return d.group 
+            })
+            .attr("x", function (d) { return x(d.group); })
+            .attr("y", function (d) { 
+                switch (key) {
+                    case "Nitrogen":
+                        return y(d.Nitrogen) - 5; 
+                    case "Normal":
+                        return y(d.Normal) - 5;
+                    case "Stress":
+                        return y(d.Stress) - 5;
+                } 
+            });
 
             svg.selectAll("rect")
             .data(data)
@@ -60,8 +74,8 @@ class SingleBarGraphVis {
                     case "Stress":
                         return '#4daf4a';
                 } 
-             });;
-             
+            });
+            
         })
        
     }
