@@ -16,14 +16,18 @@
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="scatterplot.js"></script>
-    <script src="cereal.csv.js"></script>
+    <script src="cereal.csv"></script>
 
     <script>
         var svg = d3.select("#canvas");
-        var data = d3.csvParse(cerealCsvStr)
+        var data = d3.csv("cereal.csv", function(error, data) {
+            if (error) {throw error}
+            
+            SP = ScatterplotVis(svg, data);
+            SP.drawScatterplot();
+        })
 
-        SP = ScatterplotVis(svg, data);
-        SP.drawScatterplot();
+        
     </script>
 </body>
 </html>
