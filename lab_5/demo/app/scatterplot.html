@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Taken from http://bl.ocks.org/weiglemc/6185069 -->
+    
+    <!-- Example based on http://bl.ocks.org/mbostock/3887118 -->
+    <!-- Tooltip example from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html -->
+    <!-- Coding style based on http://gist.github.com/mbostock/5977197 -->
+
+    <link rel="stylesheet" href="scatterplot.css">
+</head>
+
+<body>
+    <svg id="canvas" width="800" height="500"></svg>
+    <button onclick="sampleFromServer()">Sample</button>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="scatterplot.js"></script>
+    <script src="cereal.csv"></script>
+
+    <script>
+        var svg = d3.select("#canvas");
+        var data = d3.csv("cereal.csv", function(error, data) {
+            if (error) throw error;
+            
+            SP = ScatterplotVis(svg, data);
+            SP.drawScatterplot();
+        })
+
+        function sampleFromServer() {
+            d3.csv("/sample/10", function(error, data) {
+                if (error) throw error;
+                
+                SP.updateData(data);
+            })
+        }
+
+        
+    </script>
+</body>
+</html>
